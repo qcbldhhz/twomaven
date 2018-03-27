@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<beans xmlns="http://www.springframework.org/schema/beans"        
+    xmlns:mvc="http://www.springframework.org/schema/mvc"     
+    xmlns:tx="http://www.springframework.org/schema/tx"  
+    xmlns:aop="http://www.springframework.org/schema/aop"  
+    xmlns:context="http://www.springframework.org/schema/context"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"              
+    xsi:schemaLocation="                                               
+            http://www.springframework.org/schema/beans    
+            http://www.springframework.org/schema/beans/spring-beans.xsd    
+            http://www.springframework.org/schema/context     
+            http://www.springframework.org/schema/context/spring-context.xsd    
+            http://www.springframework.org/schema/mvc    
+            http://www.springframework.org/schema/mvc/spring-mvc.xsd  
+            http://www.springframework.org/schema/tx   
+            http://www.springframework.org/schema/tx/spring-tx.xsd  
+            http://www.springframework.org/schema/aop  
+            http://www.springframework.org/schema/aop/spring-aop.xsd "  
+    default-autowire="byName"> 
+    <context:component-scan base-package="xc.ssh" />
+    
+    <bean id="dataFormat" class="java.text.SimpleDateFormat">
+    	<constructor-arg value="yyyy-MM-dd"></constructor-arg>
+    </bean>
+    
+    <!-- 工厂注入bean  -->
+    <bean id="user" class="xc.ssh.domain.User"  >
+		<property name="birthday">
+			<bean factory-bean="dataFormat" factory-method="parse">
+				<constructor-arg value="2013-05-06"></constructor-arg>
+			</bean>
+		</property>
+    </bean>
+    
+    <bean id="userFactory" class="xc.ssh.domain.UserFactory">
+    </bean>
+    
+    
+   <!--使用构造函数为bean注入数据  -->
+   <bean id="car" class="xc.ssh.domain.Car">
+   		<property name="name" value="AAA"></property>
+   		<constructor-arg value="BMW" index="1"></constructor-arg>
+   		<constructor-arg value="黄色" index="0"></constructor-arg>
+   		<property name="id" value="111"></property>
+   </bean>
+    <bean id="class1" class="xc.ssh.domain.Classes">
+    	<property name="name" value="大班"></property>
+    	<property name="users" >
+    		<set> 
+				<ref bean="user"/>
+    		</set>
+    	</property>
+    </bean>
+    <!--定义一下我想使用的类  -->
+    <bean id="aopTest" class="xc.ssh.test.AopTest"></bean>
+    
+    <!-- 为aopTest类的方法增加一些东东 -->
+    <!-- 创建一下通知类， 这个类里面有 那些重复代码的抽取 -->
+    <bean  id="advice" class="xc.ssh.domain.Advice"></bean>
+    
+    <!-- 首先定义切点，也就是说在哪而执行 advice方法 -->
+     <aop:config>
+    	<aop:aspect ref="advice">
+    	<aop:pointcut expression="execution( * xc.ssh.test.AopTest.save(..))" id="aop"/>
+    			<aop:before pointcut-ref="aop" method="before" />
+    			
+    			
+  <!--   			<aop:after-throwing  pointcut-ref="aop" method="afterException"/> 出异常时才执行 
+    			
+    			<aop:after-returning   pointcut-ref="aop" method="after"/>  正常时才执行 
+    			<aop:after  pointcut-ref="aop"  method="afterFinalException"/> 无论怎样都执行  -->
+    			
+    			<aop:around pointcut-ref="aop"   method="around"/>
+    			
+    	</aop:aspect>
+    </aop:config>
+    
+     
+</beans>  

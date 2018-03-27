@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Nov 9, 2006 6:27:53 PM by Hibernate Tools 3.2.0.beta7 -->
+
+<hibernate-mapping  package="xc.ssh.domain"   auto-import="true">
+    <class name="User" table="t_user" >
+		<id name="id" column="t_id">
+			<generator class="identity"></generator>
+		</id>
+        
+        
+		<property name="username" type="string" column="t_username" length="20"></property>
+		<property name="password" type="string" column="t_password" length="20"></property>
+		<property name="birthday" column="t_birthday"></property>
+		
+		<!-- 单项多对一的配置  ,这配置的目的，其实就是说为User表添加外键字段 -->
+ 	  <many-to-one name="classes" column="class_id" class="Classes"   lazy="false"></many-to-one>   
+		 
+    </class>
+</hibernate-mapping>

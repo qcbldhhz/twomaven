@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="xc.ssh.domain" auto-import="true">
+	<class name="Classes" table="t_class">
+		<id name="id" column="t_id">
+			<generator class="native"></generator>
+		</id>
+		
+		<property name="name" type="string" column="t_name" length="20"></property>
+		
+		<!-- inverse控制反转，为true也就是让对方来控制添加外键值的行为。 默认是true。  
+			为false，代表自己这方来控制添加外键值的行为
+			
+			注意：inverse让哪一方维护，哪一方的级联才有效。而且inverse需要在一的一方才能使用
+		
+			注意2：例如我想让D(多)方维护，同时我又要Y方级联，这样是不行的。因为Y方级联失效
+		 -->
+ 		<set name="users"   >
+			<key column="class_id" ></key>
+			<one-to-many class="User" ></one-to-many>
+		</set>  
+		
+	</class>
+</hibernate-mapping>

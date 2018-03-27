@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+    "http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+<!-- 	<constant name="struts.action.extension" value="lol,action" /> -->
+    <constant name="struts.configuration.xml.reload" value="true"/>
+     <constant name="struts.i18n.encoding" value="UTF-8"/>
+    <package name="/" extends="struts-default" >
+
+        <interceptors>
+        	<interceptor name="Encoding" class="xc.ssh.interceptors.EncodeInterceptor"></interceptor>
+        	<interceptor-stack name="base">
+        		<interceptor-ref name="Encoding"></interceptor-ref>
+        		<interceptor-ref name="defaultStack"></interceptor-ref>
+        	</interceptor-stack>
+        </interceptors>
+        
+        <action name="login">
+        	<result>WEB-INF/login.jsp</result>
+        	<interceptor-ref name="base"></interceptor-ref>
+        </action>
+        
+        <action name="hello" class="xc.ssh.controller.HelloAction" method="execute">
+        		<exception-mapping exception="java.lang.Exception" result="error" />
+        		<result name="success">WEB-INF/hello.jsp</result>
+        		<result name="error">Error.jsp</result>
+        		<interceptor-ref name="base"></interceptor-ref>
+        </action>
+        
+        
+    </package>
+
+</struts>
